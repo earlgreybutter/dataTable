@@ -48,28 +48,34 @@ credentialRouter.post('/insertcredential', async (req, res) => {
       username,
       credentialCategory,
       credentialName,
-      owner
+      defaultRegion,
+      accessKeyId,
+      secretAccessKey,
+      owner,
     } = req.body;
 
     let insert = {
-      _id : mongoose.Types.ObjectId(),
+      _id: mongoose.Types.ObjectId(),
       credentialName: credentialName,
       credentialCategory: credentialCategory,
-      owner: "purpleduck",
+      owner: 'purpleduck',
       selectedDB: selectedDB,
       ip: ip,
       port: port,
       dbname: dbname,
       username: username,
       password: password,
+      defaultRegion: defaultRegion,
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
     };
 
     var certification = new Certification(insert);
 
-    let doc = await certification.save(function(err) {
-      if(err) console.log(err); 
+    let doc = await certification.save(function (err) {
+      if (err) console.log(err);
       return;
-    })
+    });
 
     console.log(doc);
     return res.send(doc);
@@ -91,6 +97,9 @@ credentialRouter.put('/updatecredential', async (req, res) => {
       username,
       credentialCategory,
       credentialName,
+      defaultRegion,
+      accessKeyId,
+      secretAccessKey,
       owner,
     } = req.body;
 
@@ -105,6 +114,9 @@ credentialRouter.put('/updatecredential', async (req, res) => {
         dbname: dbname,
         username: username,
         password: password,
+        defaultRegion: defaultRegion,
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
       },
     };
 
@@ -127,26 +139,25 @@ credentialRouter.put('/updatecredential', async (req, res) => {
   }
 });
 
-credentialRouter.post('/deletecredential', async(req, res) => {
-  try{
+credentialRouter.post('/deletecredential', async (req, res) => {
+  try {
     console.log(req);
     const { _id } = req.body;
-    
+
     let doc = await Certification.findByIdAndDelete(
-      _id, 
-      null, 
+      _id,
+      null,
       function (err, docs) {
         if (err) {
           console.log(err);
-        }
-        else {
+        } else {
           console.log('Deleted : ', docs);
         }
       }
     ).clone();
 
     return res.send(doc);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 });

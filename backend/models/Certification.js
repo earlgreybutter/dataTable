@@ -7,7 +7,7 @@ const CertificationSchema = new mongoose.Schema(
     owner: { type: String, required: true },
     accessKeyId: { type: String },
     secretAccessKey: { type: String },
-    region: { type: String },
+    defaultRegion: { type: String },
     service: { type: String },
     selectedDB: String,
     ip: String,

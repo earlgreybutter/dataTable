@@ -22,11 +22,31 @@
     </b-row>
     <b-row class="mt-5">
       <b-col>
+        <b-form-group
+          label="Selection mode:"
+          label-for="table-select-mode-select"
+          label-cols-md="4"
+        >
+          <b-form-select
+            id="table-select-mode-select"
+            v-model="selectMode"
+            :options="modes"
+            class="mb-3"
+          ></b-form-select>
+        </b-form-group>
+        <p>
+          <b-button size="sm" @click="selectAllRows">Select all</b-button>
+          <b-button size="sm" @click="clearSelected">Clear selected</b-button>
+        </p>
         <b-table
           ref="xlsxDataTable"
           class="shadow-sm"
           hover
           :items="xlsxDataArr"
+          :select-mode="selectMode"
+          responsive="sm"
+          selectable
+          @row-selected="onRowSelected"
         ></b-table>
       </b-col>
     </b-row>
@@ -51,14 +71,29 @@ export default {
       xlsxList: [],
       // table data
       xlsxDataArr: null,
+      // table control
+      modes: ["multi", "single"],
+      selectMode: "multi",
+      selected: [],
     };
   },
   methods: {
+    // table control
+    onRowSelected(xlsxDataArr) {
+        this.selected = xlsxDataArr
+      },
+    selectAllRows() {
+      this.$refs.xlsxDataTable.selectAllRows();
+    },
+    clearSelected() {
+      this.$refs.xlsxDataTable.clearSelected();
+    },
+    // xlsx
     xlsxDetail() {
       let me = this;
       showXlsxDetail(this.selectedXlsx)
         .then((response) => {
-          me.xlsxDataArr = JSON.parse(response.data['content']);
+          me.xlsxDataArr = JSON.parse(response.data["content"]);
         })
         .catch((err) => {
           console.log(err);
