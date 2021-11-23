@@ -2,22 +2,57 @@
   <b-container>
     <b-row class="mt-5 mb-3">
       <b-col>
-        <b-form-select
-          class="shadow-sm"
-          v-model="selectedXlsx"
-          :options="xlsxList"
-        ></b-form-select>
-      </b-col>
-      <b-col>
-        <b-button class="shadow-sm" variant="primary" @click="xlsxDetail"
-          >Load</b-button
+        <b-form-group
+          id="fieldset-3"
+          label="Table: "
+          label-for="input-3"
+          label-cols-md="4"
         >
+          <b-form-select
+            class="shadow-sm"
+            v-model="selectedXlsx"
+            :options="xlsxList"
+            @change="xlsxDetail"
+          ></b-form-select>
+        </b-form-group>
       </b-col>
+
       <b-col align-self="center">
         <div class="float-right">
           <b-icon-gear class="" font-scale="2"></b-icon-gear>
           <b-icon-plus-circle class="ml-3" font-scale="2"></b-icon-plus-circle>
         </div>
+      </b-col>
+    </b-row>
+    <b-row class="mt-5">
+      <b-col>
+        <b-form-group
+          id="fieldset-3"
+          label="Column Show And Hide: "
+          label-for="input-3"
+        >
+          <b-form-select
+            class="mb-3"
+            id="input-3"
+            v-model="selectedColumn"
+            :options="colSelectArr"
+            multiple
+          ></b-form-select>
+          <b-form-tags
+            input-id="tags-separators"
+            v-model="selectedColumn"
+            separator=" ,;"
+            placeholder="Enter new tags separated by space, comma or semicolon"
+            no-add-on-enter
+            no-outer-focus
+          ></b-form-tags>
+          <div class="mt-3">
+            Selected: <strong>{{ selectedColumn }}</strong>
+          </div>
+        </b-form-group>
+      </b-col>
+      <b-col>
+        <b-button class="shadow-sm" variant="primary">Load</b-button>
       </b-col>
     </b-row>
     <b-row class="mt-5">
@@ -71,6 +106,8 @@ export default {
       xlsxList: [],
       // table data
       xlsxDataArr: null,
+      colSelectArr: [{ value: null, text: "Column Name", disabled: true }],
+      selectedColumn: [],
       // table control
       modes: ["multi", "single"],
       selectMode: "multi",
@@ -80,8 +117,8 @@ export default {
   methods: {
     // table control
     onRowSelected(xlsxDataArr) {
-        this.selected = xlsxDataArr
-      },
+      this.selected = xlsxDataArr;
+    },
     selectAllRows() {
       this.$refs.xlsxDataTable.selectAllRows();
     },
@@ -91,9 +128,22 @@ export default {
     // xlsx
     xlsxDetail() {
       let me = this;
+      me.colSelectArr = [{ value: null, text: "Column Name", disabled: true }];
+
       showXlsxDetail(this.selectedXlsx)
         .then((response) => {
           me.xlsxDataArr = JSON.parse(response.data["content"]);
+          console.log(me.xlsxDataArr[0]);
+          let colArr = Object.keys(me.xlsxDataArr[0]);
+          console.log(colArr);
+          let tmpArr = [{ value: null, text: "Column Name", disabled: true }];
+          // column show and hide setting
+          for (let item of colArr) {
+            let rowData = { text: item, value: item };
+            tmpArr.push(rowData);
+          }
+          console.log(tmpArr);
+          me.colSelectArr = tmpArr;
         })
         .catch((err) => {
           console.log(err);

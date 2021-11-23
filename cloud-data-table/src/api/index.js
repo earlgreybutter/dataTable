@@ -47,14 +47,20 @@ function showRdbmsTableData(params) {
 }
 
 // XLSX
-function saveXlsxDocument(params) {
-  return axios.post(`${config.baseUrl}/xlsx/savexlsxcredential`, params);
-}
 function showXlsxInfo() {
   return axios.get(`${config.baseUrl}/xlsx/getxlsxlist`);
 }
+
 function showXlsxDetail(params) {
   return axios.post(`${config.baseUrl}/xlsx/xlsxcontent`, params);
+}
+
+function saveXlsxDocument(params) {
+  return axios.post(`${config.baseUrl}/xlsx/savexlsxcredential`, params);
+}
+
+function deleteXlsxDocument(params) {
+  return axios.post(`${config.baseUrl}/xlsx/deletexlsxcredential`, params);
 }
 
 export {
@@ -68,7 +74,8 @@ export {
   checkTableData,
   showCredentialInfo,
   showRdbmsTableData,
-  saveXlsxDocument,
   showXlsxInfo,
-  showXlsxDetail
+  showXlsxDetail,
+  saveXlsxDocument,
+  deleteXlsxDocument
 };

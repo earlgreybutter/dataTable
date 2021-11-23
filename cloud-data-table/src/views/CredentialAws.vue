@@ -199,7 +199,6 @@ export default {
           const tmpArr = [];
 
           for (let item of resData) {
-            console.log(item);
             let data = {
               credential_name: item.credentialName,
               credential_category: item.credentialCategory,
