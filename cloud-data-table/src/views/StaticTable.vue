@@ -31,28 +31,40 @@
           label="Column Show And Hide: "
           label-for="input-3"
         >
-          <b-form-select
-            class="mb-3"
-            id="input-3"
-            v-model="selectedColumn"
-            :options="colSelectArr"
-            multiple
-          ></b-form-select>
           <b-form-tags
             input-id="tags-separators"
             v-model="selectedColumn"
             separator=" ,;"
             placeholder="Enter new tags separated by space, comma or semicolon"
-            no-add-on-enter
+            no-add-on-change
             no-outer-focus
-          ></b-form-tags>
-          <div class="mt-3">
-            Selected: <strong>{{ selectedColumn }}</strong>
-          </div>
+          >
+            <template v-slot="{ tags, disabled, removeTag }">
+              <b-form-select
+                class="mb-3"
+                id="input-3"
+                v-model="selectedColumn"
+                :options="colSelectArr"
+                multiple
+              >
+              </b-form-select>
+              <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+                <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                  <b-form-tag
+                    @remove="removeTag(tag)"
+                    :title="tag"
+                    :disabled="disabled"
+                    variant="info"
+                    >{{ tag }}</b-form-tag
+                  >
+                </li>
+              </ul>
+            </template>
+          </b-form-tags>
         </b-form-group>
       </b-col>
       <b-col>
-        <b-button class="shadow-sm" variant="primary">Load</b-button>
+        <b-button class="shadow-sm" variant="primary" @click="saveColumnInfo">Save Column Info</b-button>
       </b-col>
     </b-row>
     <b-row class="mt-5">
@@ -77,6 +89,7 @@
           ref="xlsxDataTable"
           class="shadow-sm"
           hover
+          :fields="selectedColumn"
           :items="xlsxDataArr"
           :select-mode="selectMode"
           responsive="sm"
@@ -97,7 +110,7 @@
 </template>
 
 <script>
-import { showXlsxInfo, showXlsxDetail } from "../api/index";
+import { showXlsxInfo, showXlsxDetail, saveXlsxColumn } from "../api/index";
 
 export default {
   data() {
@@ -106,7 +119,7 @@ export default {
       xlsxList: [],
       // table data
       xlsxDataArr: null,
-      colSelectArr: [{ value: null, text: "Column Name", disabled: true }],
+      colSelectArr: [],
       selectedColumn: [],
       // table control
       modes: ["multi", "single"],
@@ -128,15 +141,19 @@ export default {
     // xlsx
     xlsxDetail() {
       let me = this;
-      me.colSelectArr = [{ value: null, text: "Column Name", disabled: true }];
+      // init
+      me.colSelectArr = [];
+      me.selectedColumn = [];
 
       showXlsxDetail(this.selectedXlsx)
         .then((response) => {
-          me.xlsxDataArr = JSON.parse(response.data["content"]);
+          console.log(response.data);
+
+          me.xlsxDataArr = JSON.parse(response.data["content"]);  // data table 의 item setting
           console.log(me.xlsxDataArr[0]);
-          let colArr = Object.keys(me.xlsxDataArr[0]);
+          let colArr = Object.keys(me.xlsxDataArr[0]);  // 전체 column 목록을 가져온다. 
           console.log(colArr);
-          let tmpArr = [{ value: null, text: "Column Name", disabled: true }];
+          let tmpArr = [];
           // column show and hide setting
           for (let item of colArr) {
             let rowData = { text: item, value: item };
@@ -144,10 +161,25 @@ export default {
           }
           console.log(tmpArr);
           me.colSelectArr = tmpArr;
+
+          // selectedColumns setting
+          console.log(response.data["selectedColumns"]);
+          me.selectedColumn = response.data["selectedColumns"];
+          console.log(me.selectedColumn);
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    saveColumnInfo() {
+      // this.selectedColumn 을 xlsxData selectedColumns 에 저장
+      let params = {};
+      Object.assign(params, this.selectedXlsx);
+      params['selectedColumns'] = this.selectedColumn;
+      console.log(params);
+      console.log(this.selectedXlsx);
+      console.log(this.selectedColumn);
+      saveXlsxColumn(params);
     },
     saveXlsxToDb() {
       console.log("saveXlsxToDb");

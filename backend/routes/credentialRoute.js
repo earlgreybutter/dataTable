@@ -3,7 +3,7 @@ const credentialRouter = Router();
 const mongoose = require('mongoose');
 const { Certification } = require('../models/Certification');
 
-// 카테고리별 credential 목록 find
+// 카테고리별 credential 목록 find (AWS, RDBMS) : 분리 필요
 credentialRouter.post('/categorycredential', async (req, res) => {
   try {
     console.log(req.body);

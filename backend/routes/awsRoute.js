@@ -25,6 +25,7 @@ awsRouter.post('/ec2', async (req, res) => {
   }
 });
 
+// 수정 필요
 awsRouter.post('/save', async (req, res) => {
   try {
     const { tableName, accessKeyId, secretAccessKey, region, service } =
@@ -42,6 +43,7 @@ awsRouter.post('/save', async (req, res) => {
   }
 });
 
+// 수정 필요
 awsRouter.get('/tables', async (req, res) => {
   const tableName = req.query.tableName;
   try {
@@ -65,6 +67,7 @@ awsRouter.get('/tables', async (req, res) => {
   }
 });
 
+// 수정 필요
 awsRouter.post('/columns', async (req, res) => {
   const { newColumnName, tableName } = req.body;
 

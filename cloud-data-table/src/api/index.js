@@ -59,6 +59,10 @@ function saveXlsxDocument(params) {
   return axios.post(`${config.baseUrl}/xlsx/savexlsxcredential`, params);
 }
 
+function saveXlsxColumn(params) {
+  return axios.post(`${config.baseUrl}/xlsx/savexlsxcolumn`, params);
+}
+
 function deleteXlsxDocument(params) {
   return axios.post(`${config.baseUrl}/xlsx/deletexlsxcredential`, params);
 }
@@ -77,5 +81,6 @@ export {
   showXlsxInfo,
   showXlsxDetail,
   saveXlsxDocument,
+  saveXlsxColumn,
   deleteXlsxDocument
 };

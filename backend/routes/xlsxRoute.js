@@ -43,7 +43,7 @@ xlsxRouter.post('/savexlsxcredential', async (req, res) => {
         _id: mongoose.Types.ObjectId(),
         credentialName: credentialName,
         owner: 'purpleduck',
-        content: content
+        content: content,
       };
 
       var xlsxData = new XlsxData(insert);
@@ -58,9 +58,9 @@ xlsxRouter.post('/savexlsxcredential', async (req, res) => {
         $set: {
           credentialName: credentialName,
           owner: 'purpleduck',
-          content: content
-        }
-      }
+          content: content,
+        },
+      };
 
       let options = { new: true, upsert: true };
 
@@ -74,6 +74,32 @@ xlsxRouter.post('/savexlsxcredential', async (req, res) => {
         }
       ).clone();
     }
+
+    return res.send(doc);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// 보여줄 column update
+xlsxRouter.post('/savexlsxcolumn', async (req, res) => {
+  try {
+    console.log(req.body);
+    const { _id, selectedColumns } = req.body;
+
+    // update
+    let update = {
+      $set: {
+        selectedColumns
+      },
+    };
+
+    let options = { new: true, upsert: true };  // upsert 에 대해서 더 알아봐야 함.
+
+    doc = await XlsxData.findByIdAndUpdate(_id, update, options, (err, doc) => {
+      if (err) console.log('Something wrong when save xlsx data');
+      console.log(doc);
+    }).clone();
 
     return res.send(doc);
   } catch (err) {

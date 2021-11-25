@@ -6,6 +6,7 @@ const app = express();
 
 const { credentialRouter } = require('./routes/credentialRoute');
 const { awsRouter } = require('./routes/awsRoute');
+const { awsver3Router } = require('./routes/awsver3Route');
 const { myclassRouter } = require('./routes/myclassRoute');
 const { xlsxRouter } = require('./routes/xlsxRoute');
 
@@ -21,9 +22,10 @@ const server = async () => {
     app.use(cors());
 
     // setting routers
-    app.use('/credential', credentialRouter);
-    app.use('/aws', awsRouter);
-    app.use('/myclass', myclassRouter);
+    app.use('/credential', credentialRouter); // AWS & RDBMS 같이 관리하고 있는데, 분리할 예정
+    app.use('/aws', awsRouter); // ec2
+    app.use('/awsver3', awsver3Router);
+    app.use('/myclass', myclassRouter); // RDBMS
     app.use('/xlsx', xlsxRouter);
 
     const port = 8888;
