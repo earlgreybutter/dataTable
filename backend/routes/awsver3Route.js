@@ -2,7 +2,7 @@ const { Router } = require('express');
 const awsver3Router = Router();
 const {
   EC2Client,
-  DescribeInstancesCommand,
+  DescribeInstancesCommand, 
   DescribeRegionsCommand,
   DescribeKeyPairsCommand,
   DescribeVpcsCommand,
@@ -34,23 +34,25 @@ awsver3Router.post('/checkconnection', async (req, res) => {
 // ec2 instances
 awsver3Router.post('/ec2instances', async (req, res) => {
   try {
-    const { accessKeyId, secretAccessKey } = req.body;
-    const client = new EC2Client({
-      credentials: {
-        accessKeyId,
-        secretAccessKey,
-      }, // not preferred way
-    });
+    // const { accessKeyId, secretAccessKey } = req.body;
+    let config = {
+      // credentials: {
+      //   accessKeyId,
+      //   secretAccessKey,
+      // }, // not preferred way
+    };
+    const client = new EC2Client(config);
     const command = new DescribeInstancesCommand({
       DryRun: false,
     });
     const response = await client.send(command);
-    res.send(response);
+    return res.send(response['Reservations']);
   } catch (err) {
     console.log(err);
   }
 });
 
+// 이건 credential 설정 시 사용 
 awsver3Router.post('/ec2regions', async (req, res) => {
   // req 를 보낼지말지 모름.
   try {
@@ -69,7 +71,7 @@ awsver3Router.post('/ec2regions', async (req, res) => {
     const client = new EC2Client();
     const command = new DescribeRegionsCommand(input);
     const response = await client.send(command);
-    return res.send(response['Regions']); // Array
+    return res.send(response['Regions']); // Arra6y
   } catch (err) {
     console.log(err);
   }
@@ -82,7 +84,7 @@ awsver3Router.post('/ec2keypairs', async (req, res) => {
     const client = new EC2Client(config);
     const command = new DescribeKeyPairsCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['KeyPairs']);
   } catch (err) {
     console.log(err);
   }
@@ -95,7 +97,7 @@ awsver3Router.post('/ec2vpcs', async (req, res) => {
     const client = new EC2Client(config);
     const command = new DescribeVpcsCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['Vpcs']);
   } catch (err) {
     console.log(err);
   }
@@ -108,7 +110,7 @@ awsver3Router.post('/ec2internetgateways', async (req, res) => {
     const client = new EC2Client(config);
     const command = new DescribeInternetGatewaysCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['InternetGateways']);
   } catch (err) {
     console.log(err);
   }
@@ -121,7 +123,7 @@ awsver3Router.post('/ec2addresses', async (req, res) => {
     const client = new EC2Client(config);
     const command = new DescribeAddressesCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['Addresses']);
   } catch (err) {
     console.log(err);
   }
@@ -134,7 +136,7 @@ awsver3Router.post('/ec2subnets', async (req, res) => {
     const client = new EC2Client(config);
     const command = new DescribeSubnetsCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['Subnets']);
   } catch (err) {
     console.log(err);
   }
@@ -147,7 +149,7 @@ awsver3Router.post('/ec2routetables', async (req, res) => {
     const client = new EC2Client(config);
     const command = new DescribeRouteTablesCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['RouteTables']);
   } catch (err) {
     console.log(err);
   }
@@ -160,7 +162,7 @@ awsver3Router.post('/ec2networkacls', async (req, res) => {
     const client = new EC2Client(config);
     const command = new DescribeNetworkAclsCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['NetworkAcls']);
   } catch (err) {
     console.log(err);
   }
@@ -174,7 +176,7 @@ awsver3Router.post('/elbv2loadbalancers', async (req, res) => {
     const client = new ElasticLoadBalancingV2Client(config);
     const command = new DescribeLoadBalancersCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['LoadBalancers']);
   } catch (err) {
     console.log(err);
   }
@@ -187,7 +189,7 @@ awsver3Router.post('/elbv2targetgroups', async (req, res) => {
     const client = new ElasticLoadBalancingV2Client(config);
     const command = new DescribeTargetGroupsCommand(input);
     const response = await client.send(command);
-    return res.send(response);
+    return res.send(response['TargetGroups']);
   } catch (err) {
     console.log(err);
   }
@@ -203,7 +205,7 @@ awsver3Router.post('/s3bucketslist', async (req, res) => {
     const command = new ListBucketsCommand(input);
     const response = await client.send(command);
 
-    return res.send(response);
+    return res.send(response['Buckets']);
   } catch (err) {
     console.log(err);
   }

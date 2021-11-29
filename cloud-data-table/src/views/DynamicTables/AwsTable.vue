@@ -8,15 +8,15 @@
           :options="awsServiceOptions"
         ></b-form-select>
       </b-col>
-      <b-col>
+      <!-- <b-col>
         <b-form-select
           class="shadow-sm"
           v-model="selectedAwsCredential"
           :options="awsCredentialOptions"
         ></b-form-select>
-      </b-col>
+      </b-col> -->
       <b-col>
-        <b-button class="shadow-sm" variant="primary">Load</b-button>
+        <b-button class="shadow-sm" variant="primary" @click="setTableData">Load</b-button>
       </b-col>
       <b-col align-self="center">
         <div class="float-right">
@@ -52,9 +52,9 @@ export default {
       selectedAwsService: null,
       awsServiceOptions: [
         { value: null, text: "Please select a Service", disabled: true },
-        { value: "ec2", text: "EC2" },
-        { value: "rds", text: "RDS" },
-        { value: "s3", text: "S3" },
+        { value: "ec2instances", text: "EC2 Instance" },
+        { value: "ec2keypairs", text: "EC2 Keypair"},
+        { value: "ec2vpcs", text: "EC2 VPC"}
       ],
       selectedAwsCredential: null,
       awsCredentialOptions: [
@@ -70,6 +70,11 @@ export default {
       ],
       selectedIndexColumn: null,
     };
+  },
+  method: {
+    setTableData() {
+      console.log(this.selectedAwsService);
+    }
   },
   computed: {
     indexColumns() {

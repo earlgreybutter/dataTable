@@ -67,6 +67,9 @@ function deleteXlsxDocument(params) {
   return axios.post(`${config.baseUrl}/xlsx/deletexlsxcredential`, params);
 }
 
+// AWS SDK JS V3
+// function 
+
 export {
   validateEc2Certification,
   showCredentialInfoByCategory,
