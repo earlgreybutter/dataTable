@@ -68,7 +68,17 @@ function deleteXlsxDocument(params) {
 }
 
 // AWS SDK JS V3
-// function 
+function saveEc2Instance() {
+  return axios.post(`${config.baseUrl}/awsver3/ec2instances`);
+} 
+
+function showAwsTableData(params) {
+  return axios.post(`${config.baseUrl}/awsver3/findawsdocument`, params);
+} 
+
+function saveAwsColumn(params) {
+  return axios.post(`${config.baseUrl}/awsver3/saveawscolumn`, params);
+}
 
 export {
   validateEc2Certification,
@@ -85,5 +95,8 @@ export {
   showXlsxDetail,
   saveXlsxDocument,
   saveXlsxColumn,
-  deleteXlsxDocument
+  deleteXlsxDocument,
+  saveEc2Instance,
+  showAwsTableData,
+  saveAwsColumn
 };

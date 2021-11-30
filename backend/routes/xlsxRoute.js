@@ -96,7 +96,7 @@ xlsxRouter.post('/savexlsxcolumn', async (req, res) => {
 
     let options = { new: true, upsert: true };  // upsert 에 대해서 더 알아봐야 함.
 
-    doc = await XlsxData.findByIdAndUpdate(_id, update, options, (err, doc) => {
+    let doc = await XlsxData.findByIdAndUpdate(_id, update, options, (err, doc) => {
       if (err) console.log('Something wrong when save xlsx data');
       console.log(doc);
     }).clone();

@@ -23,7 +23,7 @@ const server = async () => {
 
     // setting routers
     app.use('/credential', credentialRouter); // AWS & RDBMS 같이 관리하고 있는데, 분리할 예정
-    app.use('/aws', awsRouter); // ec2
+    app.use('/aws', awsRouter); // test - ec2
     app.use('/awsver3', awsver3Router);
     app.use('/myclass', myclassRouter); // RDBMS
     app.use('/xlsx', xlsxRouter);

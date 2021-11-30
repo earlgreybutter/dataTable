@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const awsver3Router = Router();
+const mongoose = require('mongoose');
+const { AwsVer3Data } = require('../models/awsVer3Data');
 const {
   EC2Client,
   DescribeInstancesCommand, 
@@ -31,27 +33,6 @@ awsver3Router.post('/checkconnection', async (req, res) => {
   }
 });
 
-// ec2 instances
-awsver3Router.post('/ec2instances', async (req, res) => {
-  try {
-    // const { accessKeyId, secretAccessKey } = req.body;
-    let config = {
-      // credentials: {
-      //   accessKeyId,
-      //   secretAccessKey,
-      // }, // not preferred way
-    };
-    const client = new EC2Client(config);
-    const command = new DescribeInstancesCommand({
-      DryRun: false,
-    });
-    const response = await client.send(command);
-    return res.send(response['Reservations']);
-  } catch (err) {
-    console.log(err);
-  }
-});
-
 // 이건 credential 설정 시 사용 
 awsver3Router.post('/ec2regions', async (req, res) => {
   // req 를 보낼지말지 모름.
@@ -71,7 +52,48 @@ awsver3Router.post('/ec2regions', async (req, res) => {
     const client = new EC2Client();
     const command = new DescribeRegionsCommand(input);
     const response = await client.send(command);
-    return res.send(response['Regions']); // Arra6y
+    return res.send(response['Regions']); // Array
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// ec2 instances
+awsver3Router.post('/ec2instances', async (req, res) => {
+  try {
+    // const { accessKeyId, secretAccessKey } = req.body;
+    let config = {
+      // credentials: {
+      //   accessKeyId,
+      //   secretAccessKey,
+      // }, // not preferred way
+    };
+    const client = new EC2Client(config);
+    const command = new DescribeInstancesCommand({
+      DryRun: false,
+    });
+    const response = await client.send(command);
+
+    console.log(JSON.stringify(response['Reservations']));  // value to string
+
+    
+    // DB 
+    let insert = {
+      _id: mongoose.Types.ObjectId(),
+      credentialName: 'ec2instances',
+      owner: 'purpleduck',
+      content: JSON.stringify(response['Reservations'])
+    }
+
+    let awsVer3Data = new AwsVer3Data(insert);
+
+    let doc = await awsVer3Data.save(function (err) {
+      if (err) console.log(err);
+      return;
+    });
+    
+
+    return res.send(doc);
   } catch (err) {
     console.log(err);
   }
@@ -206,6 +228,50 @@ awsver3Router.post('/s3bucketslist', async (req, res) => {
     const response = await client.send(command);
 
     return res.send(response['Buckets']);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// DB find 
+awsver3Router.post('/findawsdocument', async (req, res) => {
+  try {
+    console.log(req.body); // req 로 credential name 받아오기
+    const { credentialName } = req.body;
+    const awsResult = await AwsVer3Data.findOne({
+      credentialName: credentialName
+    });
+
+    return res.send(awsResult);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// save column data 
+awsver3Router.post('/saveawscolumn', async (req, res) => {
+  try {
+    console.log(req.body);
+    const { credentialName, selectedColumns } = req.body;
+
+    let filter = {
+      credentialName
+    }
+
+    let update = {
+      $set: {
+        credentialName,
+        selectedColumns
+      }
+    }
+
+    let options = {};
+
+    let doc = await AwsVer3Data.findOneAndUpdate(filter, update, options, (err, doc) => {
+      if (err) console.log('Something wrong when save aws column data')
+      console.log(doc);
+    }).clone();
+    return res.send(doc);
   } catch (err) {
     console.log(err);
   }
