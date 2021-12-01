@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import Home from "../views/Home.vue";
+import Mytable from "../views/MyTable.vue";
 import Credential from "../views/Credential.vue";
 import AwsTable from "../views/DynamicTables/AwsTable.vue";
 import RdbmsTable from "../views/DynamicTables/RdbmsTable.vue";
@@ -15,6 +16,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/mytable",
+    name: "Mytable",
+    component: Mytable
   },
   {
     path: "/credential",

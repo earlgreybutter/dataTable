@@ -7,7 +7,9 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item href="#" exact-active-class="active">My Tables</b-nav-item>
+        <b-nav-item :to="{ name: 'Mytable' }" exact-active-class="active"
+          >My Tables</b-nav-item
+        >
         <b-nav-item :to="{ name: 'Credential' }" exact-active-class="active"
           >Credential</b-nav-item
         >
@@ -22,7 +24,9 @@
             >NoSQL</b-dropdown-item
           >
         </b-nav-item-dropdown>
-        <b-nav-item :to="{ name: 'StaticTable' }" exact-active-class="active">Static Tables</b-nav-item>
+        <b-nav-item :to="{ name: 'StaticTable' }" exact-active-class="active"
+          >Static Tables</b-nav-item
+        >
         <b-nav-item href="#" exact-active-class="active">Big Tables</b-nav-item>
         <b-nav-item-dropdown text="Admin" left>
           <b-dropdown-item href="#" exact-active-class="active"
@@ -38,5 +42,4 @@
 export default {};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
