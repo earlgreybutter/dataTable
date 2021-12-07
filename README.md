@@ -1,6 +1,3 @@
-# vuejs-deep-dive
-메가존클라우드 Hybrix Task 2-2
-
 DeepDive Vue.js
 -----------------------------
 . Research Vue:
