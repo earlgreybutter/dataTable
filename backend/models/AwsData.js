@@ -99,8 +99,10 @@ const AwsDataSchema = new mongoose.Schema(
     UsageOperation: String,
     UsageOperationUpdateTime: String,
     tableName: String,
+    // UserCustom: { refs: 'xlsxData'} // 이렇게 되어야 한다
   },
-  { timestamps: true }
+  { timestamps: true },
+  
 );
 
 const AwsData = mongoose.model('awsData', AwsDataSchema);

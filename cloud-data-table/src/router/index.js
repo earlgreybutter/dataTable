@@ -8,6 +8,7 @@ import AwsTable from "../views/DynamicTables/AwsTable.vue";
 import RdbmsTable from "../views/DynamicTables/RdbmsTable.vue";
 import NosqlTable from "../views/DynamicTables/NosqlTable.vue";
 import StaticTable from "../views/StaticTable.vue";
+import SpreadSheet from "../views/SpreadSheet.vue";
 
 Vue.use(VueRouter);
 
@@ -46,6 +47,11 @@ const routes = [
     path: "/statictable",
     name: "StaticTable",
     component: StaticTable,
+  },
+  {
+    path: "/spreadsheet",
+    name: "SpreadSheet",
+    component: SpreadSheet,
   }
 ];
 

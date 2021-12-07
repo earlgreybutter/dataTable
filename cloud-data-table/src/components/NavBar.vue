@@ -27,7 +27,9 @@
         <b-nav-item :to="{ name: 'StaticTable' }" exact-active-class="active"
           >Static Tables</b-nav-item
         >
-        <b-nav-item href="#" exact-active-class="active">Big Tables</b-nav-item>
+        <b-nav-item :to="{ name: 'SpreadSheet' }" exact-active-class="active"
+          >SpreadSheet</b-nav-item
+        >
         <b-nav-item-dropdown text="Admin" left>
           <b-dropdown-item href="#" exact-active-class="active"
             >columns</b-dropdown-item

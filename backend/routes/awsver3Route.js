@@ -76,10 +76,10 @@ awsver3Router.post('/ec2instances', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2instances' },
+      { TableType: 'ec2instances' },
       {
         $set: {
-          credentialName: 'ec2instances',
+          TableType: 'ec2instances',
           owner: 'purpleduck',
           content: JSON.stringify(response['Reservations']),
         },
@@ -94,6 +94,16 @@ awsver3Router.post('/ec2instances', async (req, res) => {
       }
     ).clone();
 
+    // 이런식으로 되어야 한다
+    // try {
+    //   let result = await AwsVer3Data.findOneAndUpdate({}).exec();
+    //   if (result) {
+
+    //   }
+    // } catch(e) {
+
+    // }
+    
     return res.send(doc);
   } catch (err) {
     console.log(err);
@@ -110,10 +120,10 @@ awsver3Router.post('/ec2keypairs', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2keypairs' },
+      { TableType: 'ec2keypairs' },
       {
         $set: {
-          credentialName: 'ec2keypairs',
+          TableType: 'ec2keypairs',
           owner: 'purpleduck',
           content: JSON.stringify(response['Keypairs']),
         },
@@ -144,10 +154,10 @@ awsver3Router.post('/ec2vpcs', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2vpcs' },
+      { TableType: 'ec2vpcs' },
       {
         $set: {
-          credentialName: 'ec2vpcs',
+          TableType: 'ec2vpcs',
           owner: 'purpleduck',
           content: JSON.stringify(response['Vpcs']),
         },
@@ -178,10 +188,10 @@ awsver3Router.post('/ec2internetgateways', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2internetgateways' },
+      { TableType: 'ec2internetgateways' },
       {
         $set: {
-          credentialName: 'ec2internetgateways',
+          TableType: 'ec2internetgateways',
           owner: 'purpleduck',
           content: JSON.stringify(response['InternetGateways']),
         },
@@ -212,10 +222,10 @@ awsver3Router.post('/ec2addresses', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2addresses' },
+      { TableType: 'ec2addresses' },
       {
         $set: {
-          credentialName: 'ec2addresses',
+          TableType: 'ec2addresses',
           owner: 'purpleduck',
           content: JSON.stringify(response['Addresses']),
         },
@@ -246,10 +256,10 @@ awsver3Router.post('/ec2subnets', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2subnets' },
+      { TableType: 'ec2subnets' },
       {
         $set: {
-          credentialName: 'ec2subnets',
+          TableType: 'ec2subnets',
           owner: 'purpleduck',
           content: JSON.stringify(response['Subnets']),
         },
@@ -280,10 +290,10 @@ awsver3Router.post('/ec2routetables', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2routetables' },
+      { TableType: 'ec2routetables' },
       {
         $set: {
-          credentialName: 'ec2routetables',
+          TableType: 'ec2routetables',
           owner: 'purpleduck',
           content: JSON.stringify(response['RouteTables']),
         },
@@ -314,10 +324,10 @@ awsver3Router.post('/ec2networkacls', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'ec2networkacls' },
+      { TableType: 'ec2networkacls' },
       {
         $set: {
-          credentialName: 'ec2networkacls',
+          TableType: 'ec2networkacls',
           owner: 'purpleduck',
           content: JSON.stringify(response['NetworkAcls']),
         },
@@ -349,10 +359,10 @@ awsver3Router.post('/elbv2loadbalancers', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'elbv2loadbalancers' },
+      { TableType: 'elbv2loadbalancers' },
       {
         $set: {
-          credentialName: 'elbv2loadbalancers',
+          TableType: 'elbv2loadbalancers',
           owner: 'purpleduck',
           content: JSON.stringify(response['LoadBalancers']),
         },
@@ -383,10 +393,10 @@ awsver3Router.post('/elbv2targetgroups', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 'elbv2targetgroups' },
+      { TableType: 'elbv2targetgroups' },
       {
         $set: {
-          credentialName: 'elbv2targetgroups',
+          TableType: 'elbv2targetgroups',
           owner: 'purpleduck',
           content: JSON.stringify(response['TargetGroups']),
         },
@@ -419,10 +429,10 @@ awsver3Router.post('/s3bucketslist', async (req, res) => {
 
     // DB insert & update
     let doc = await AwsVer3Data.findOneAndUpdate(
-      { credentialName: 's3bucketslist' },
+      { TableType: 's3bucketslist' },
       {
         $set: {
-          credentialName: 's3bucketslist',
+          TableType: 's3bucketslist',
           owner: 'purpleduck',
           content: JSON.stringify(response['Buckets']),
         },
@@ -446,7 +456,7 @@ awsver3Router.post('/s3bucketslist', async (req, res) => {
 // Todo. aws 목록 가져오는 거
 awsver3Router.get('/findawsapilist', async (req, res) => {
   try {
-    const awsResult = await AwsVer3Data.find({}, { credentialName: 1 });
+    const awsResult = await AwsVer3Data.find({}, { TableType: 1 });
     return res.send(awsResult);
   } catch (err) {
     console.log(err);
@@ -457,9 +467,9 @@ awsver3Router.get('/findawsapilist', async (req, res) => {
 awsver3Router.post('/findawsdocument', async (req, res) => {
   try {
     console.log(req.body); // req 로 credential name 받아오기
-    const { credentialName } = req.body;
+    const { TableType } = req.body;
     const awsResult = await AwsVer3Data.findOne({
-      credentialName: credentialName,
+      TableType
     });
 
     return res.send(awsResult);
@@ -472,16 +482,16 @@ awsver3Router.post('/findawsdocument', async (req, res) => {
 awsver3Router.post('/saveawscolumn', async (req, res) => {
   try {
     console.log(req.body);
-    const { credentialName, selectedColumns } = req.body;
+    const { TableType, selectedColumns } = req.body;
 
     let filter = {
-      credentialName,
+      TableType,
     };
 
     let update = {
       $set: {
-        credentialName,
-        selectedColumns,
+        TableType,
+        selectedColumns
       },
     };
 

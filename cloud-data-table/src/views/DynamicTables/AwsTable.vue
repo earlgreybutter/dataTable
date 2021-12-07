@@ -9,13 +9,6 @@
           @change="setTableData"
         ></b-form-select>
       </b-col>
-      <!-- <b-col>
-        <b-form-select
-          class="shadow-sm"
-          v-model="selectedAwsCredential"
-          :options="awsCredentialOptions"
-        ></b-form-select>
-      </b-col> -->
       <b-col align-self="center">
         <div class="float-right">
           <b-icon-gear class="" font-scale="2" v-b-modal.modalPopover></b-icon-gear>
@@ -34,8 +27,34 @@
               </b-col>
             </b-row>
           </b-modal>
-          <b-icon-plus-circle class="ml-3" font-scale="2"></b-icon-plus-circle>
+          <b-icon-plus-circle
+            class="ml-3"
+            font-scale="2"
+            @click="addColumn"
+          ></b-icon-plus-circle>
+          <!-- <b-modal id="modalPopover1" title="Add User Column">
+            <b-row>
+              <p>{{ selectedAwsService }}</p>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-button>Add</b-button>
+              </b-col>
+            </b-row>
+          </b-modal> -->
         </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-form-group id="fieldset-2" label="Table Name:" label-for="input-2">
+          <b-form-input
+            id="input-2"
+            v-model="tableName"
+            autocomplete="off"
+            trim
+          ></b-form-input>
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row class="mt-5">
@@ -85,12 +104,11 @@
     </b-row>
     <b-row class="mt-5">
       <b-col>
-        <b-table
-          class="shadow-sm"
-          hover
-          :fields="selectedColumn"
-          :items="awsDataArr"
-        ></b-table>
+        <b-table class="shadow-sm" hover :fields="selectedColumn" :items="awsDataArr">
+          <!-- <template v-for="field in selectedColumn" v-slot:[`cell(${field})`]="field">
+          <input :value="field"/>
+        </template> -->
+        </b-table>
       </b-col>
     </b-row>
   </b-container>
@@ -116,6 +134,7 @@ import {
 export default {
   data() {
     return {
+      //  data=null,
       colSelectArr: [],
       selectedColumn: [],
 
@@ -164,7 +183,7 @@ export default {
           console.log(responseArr);
           let instanceArr = [];
 
-          if (this.selectedAwsDoc.credentialName == "ec2instances") {
+          if (this.selectedAwsDoc.TableType == "ec2instances") {
             // ec2 instances 일때 - Todo. 이것도 case 별로 하나하나 customizing 할건가?
 
             for (let i = 0; i < responseArr.length; i++) {
@@ -234,7 +253,7 @@ export default {
       console.log(this.selectedAwsDoc);
       console.log(this.selectedColumn);
       let params = {
-        selectedColumns: this.selectedColumn
+        selectedColumns: this.selectedColumn,
       };
       Object.assign(params, this.selectedAwsDoc);
       saveAwsColumn(params)
@@ -245,15 +264,20 @@ export default {
           console.log(err);
         });
     },
+    addColumn() {
+      console.log("addColumn");
+      // table 에 column 추가
+      this.selectedColumn.push("test");
+    },
   },
   created() {
     showAwsApiList()
       .then((response) => {
         let selectData = response.data;
-        let selectArr = [{ value: null, text: "Credential Info", disabled: true }];
+        let selectArr = [{ value: null, text: "TableType Info", disabled: true }];
 
         for (let item of selectData) {
-          let data = { text: item.credentialName, value: item };
+          let data = { text: item.TableType, value: item };
           selectArr.push(data);
         }
         this.awsApiList = selectArr;

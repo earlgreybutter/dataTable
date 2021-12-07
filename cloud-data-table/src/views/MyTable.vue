@@ -1,6 +1,20 @@
 <template>
   <b-container>
     <b-row class="mt-5">
+      <b-col align-self="center">
+        <div class="float-right">
+          <b-icon-plus-circle v-b-modal.modalPopover class="ml-3" font-scale="2"></b-icon-plus-circle>
+          <b-modal id="modalPopover" title="Add User Column">
+            <b-row>
+              <b-col>
+                <b-button>Add</b-button>
+              </b-col>
+            </b-row>
+          </b-modal>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row class="mt-5">
       <b-table class="shadow-sm" hover :fields="tableInfo" :items="tableDataArr">
       </b-table>
     </b-row>
